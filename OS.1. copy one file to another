@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main() {
+    FILE *source, *destination;
+    int ch;
+    source = fopen("source.txt", "r");
+    if (source == NULL) {
+        perror("Error opening source file");
+        return EXIT_FAILURE;
+    }
+    destination = fopen("destination.txt", "w");
+    if (destination == NULL) {
+        perror("Error opening destination file");
+        return EXIT_FAILURE;
+    }
+    while ((ch = fgetc(source)) != EOF) {
+        fputc(ch, destination);
+    }
+    fclose(source);
+    fclose(destination);
+    return EXIT_SUCCESS;
+}
