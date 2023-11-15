@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+// Structure to represent a process
+struct Process {
+    int pid;  // Process ID
+    int arrival_time;  // Arrival time of the process
+    int burst_time;  // Burst time of the process
+};
+// Function to compare two processes based on their arrival time
+int compare_arrival_time(const void *a, const void *b) {
+    const struct Process *p1 = (const struct Process *)a;
+    const struct Process *p2 = (const struct Process *)b;
+    return p1->arrival_time - p2->arrival_time;
+}
+// Function to find the waiting time for a process
+int waiting_time(struct Process *processes, int n, int pid) {
+    int waiting_time = 0;
+    for (int i = 0; i < n; i++) {
+        if (processes[i].pid == pid) {
+            for (int j = 0; j < i; j++) {
+                if (processes[j].arrival_time <= processes[i].arrival_time && processes[j].burst_time > 0) {
+                    waiting_time += processes[j].burst_time;
+                }
+            }
+            break;
+        }
+    }
+    return waiting_time;
+}
+// Function to find the turnaround time for a process
+int turnaround_time(struct Process *processes, int n, int pid) {
+    int turnaround_time = 0;
+    for (int i = 0; i < n; i++) {
+        if (processes[i].pid == pid) {
+            turnaround_time = processes[i].burst_time + waiting_time(processes, n, pid);
+            break;
+        }
+    }
+    return turnaround_time;
+}
+// Function to print the Gantt chart
+void print_gantt_chart(struct Process *processes, int n) {
+    int time = 0;
+    printf("Gantt Chart:\n");
+    printf("--------------------------------------------------------\n");
+    for (int i = 0; i < n; i++) {
+        printf("| P%d
